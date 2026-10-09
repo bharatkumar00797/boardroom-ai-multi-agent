@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "boardroom-ai-multi-agent"
+version = "0.1.0"
+description = "AI multi-agent business decision engine: executive role agents debate, critique and vote on a decision and produce a structured decision memo."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Bharatkumar Chandvani" }]
+requires-python = ">=3.11"
+keywords = ["ai", "llm", "ai-agents", "multi-agent", "decision-making", "business-strategy"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Office/Business",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "pydantic>=2.6",
+  "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5", "mypy>=1.10"]
+
+[project.scripts]
+boardroom = "boardroom.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/boardroom"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src/boardroom"]
