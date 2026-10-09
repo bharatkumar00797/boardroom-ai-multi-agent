@@ -106,7 +106,7 @@
     setStatus("The board is debating...");
     try {
       const created = await api("/api/decisions", { method: "POST", body: JSON.stringify(body) });
-      startView(created);
+      await startView(created);
       if (created.state === "finished" || created.state === "error") {
         (created.events || []).forEach(addEvent);
         finish(created);
@@ -122,12 +122,12 @@
   async function openDecision(id) {
     try {
       const detail = await api("/api/decisions/" + encodeURIComponent(id));
-      startView(detail);
+      await startView(detail);
       poll();
     } catch (err) { setStatus(err.message); }
   }
 
-  function startView(detail) {
+  async function startView(detail) {
     clearTimeout(state.timer);
     state.current = { id: detail.id, scenario: null, memo: null };
     state.cursor = 0;
@@ -137,9 +137,11 @@
     $("chart").replaceChildren();
     $("memo").replaceChildren();
     $("headline").textContent = "Debate in progress: " + detail.title;
-    api("/api/scenarios/" + encodeURIComponent(detail.scenario_id))
-      .then((sc) => { if (state.current && state.current.id === detail.id) state.current.scenario = sc; })
-      .catch(() => {});
+    const cur = state.current;
+    if (state.scenarios[detail.scenario_id]) {
+      try { cur.scenario = await api("/api/scenarios/" + encodeURIComponent(detail.scenario_id)); }
+      catch (err) { /* titles fall back to option ids */ }
+    }
   }
 
   async function poll() {
