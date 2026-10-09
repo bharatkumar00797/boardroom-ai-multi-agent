@@ -313,7 +313,7 @@ def create_app(
             body.provider is None and not cfg.public_demo
         )
         provider = base.provider if use_configured else "mock"
-        if provider != "mock" and not who.trusted:
+        if (provider != "mock" or body.provider == "configured") and not who.trusted:
             raise HTTPException(
                 http.HTTP_403_FORBIDDEN, "Only the offline mock provider is enabled here"
             )
