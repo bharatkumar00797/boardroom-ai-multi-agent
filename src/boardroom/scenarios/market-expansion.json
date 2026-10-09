@@ -1,0 +1,15 @@
+{
+  "id": "market-expansion",
+  "title": "Expansion: which market do we enter next?",
+  "question": "We have budget for one international launch next year. Which market should we enter?",
+  "context": "Consumer fintech app with 2M users in India. Strong brand with students and young professionals; payments licence held only domestically.",
+  "constraints": ["Launch within 12 months", "Must not jeopardise the domestic payments licence"],
+  "options": [
+    {"id": "uae", "title": "UAE remittance corridor", "description": "Target the Indian diaspora with remittances back home; partner bank available.",
+     "attributes": {"cost": 5, "revenue_upside": 7, "strategic_fit": 8, "time_to_value": 7, "technical_risk": 4, "regulatory_risk": 5, "customer_value": 8}},
+    {"id": "southeast-asia", "title": "Indonesia and Vietnam wallet launch", "description": "Large unbanked youth market, but needs local e-money licences and new partners.",
+     "attributes": {"cost": 8, "revenue_upside": 9, "strategic_fit": 6, "time_to_value": 3, "technical_risk": 6, "regulatory_risk": 7, "customer_value": 7}},
+    {"id": "crypto-eu", "title": "EU crypto trading feature", "description": "Ride the crypto trend in the EU through an unlicensed offshore entity.",
+     "attributes": {"cost": 4, "revenue_upside": 8, "strategic_fit": 3, "time_to_value": 6, "technical_risk": 5, "regulatory_risk": 9, "customer_value": 5}}
+  ]
+}

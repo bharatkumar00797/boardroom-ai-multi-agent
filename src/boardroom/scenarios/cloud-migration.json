@@ -1,0 +1,15 @@
+{
+  "id": "cloud-migration",
+  "title": "Data-centre exit: how should we move to the cloud?",
+  "question": "Our co-located data-centre contract ends in 14 months. Which migration strategy should we commit to?",
+  "context": "Mid-size B2B SaaS, 40 services, 2 legacy monoliths, 18 engineers on platform work. Hosting cost is 22% of revenue and the board wants it under 15% within two years.",
+  "constraints": ["Zero customer-facing downtime longer than 30 minutes", "Capex budget capped at USD 1.2M"],
+  "options": [
+    {"id": "lift-and-shift", "title": "Lift and shift everything to IaaS", "description": "Move VMs as-is in one programme, optimise later.",
+     "attributes": {"cost": 4, "revenue_upside": 3, "strategic_fit": 4, "time_to_value": 8, "technical_risk": 4, "regulatory_risk": 3, "customer_value": 4}},
+    {"id": "phased-replatform", "title": "Phased re-platform onto managed services", "description": "Containerise services in waves, move databases to managed offerings, retire the monoliths last.",
+     "attributes": {"cost": 6, "revenue_upside": 6, "strategic_fit": 9, "time_to_value": 5, "technical_risk": 5, "regulatory_risk": 3, "customer_value": 7}},
+    {"id": "full-rewrite", "title": "Rewrite as cloud-native microservices", "description": "Freeze features for a year and rebuild the product on serverless.",
+     "attributes": {"cost": 9, "revenue_upside": 7, "strategic_fit": 8, "time_to_value": 1, "technical_risk": 9, "regulatory_risk": 3, "customer_value": 5}}
+  ]
+}
