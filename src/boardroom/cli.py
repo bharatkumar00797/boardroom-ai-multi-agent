@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -32,7 +34,42 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--format", choices=["markdown", "json"], default="markdown")
     run.add_argument("--out", type=Path, default=None, help="write the memo to this file")
     run.add_argument("--quiet", action="store_true", help="do not print live progress")
+    serve = sub.add_parser("serve", help="start the REST API and web dashboard")
+    serve.add_argument(
+        "--host",
+        default=os.getenv("HOST", "127.0.0.1"),
+        help="bind address (default: $HOST or 127.0.0.1)",
+    )
+    serve.add_argument("--port", type=int, default=None, help="port (default: $PORT or 8000)")
+    serve.add_argument("--dev", action="store_true", help="dev mode: no API key required")
     return parser
+
+
+def _cmd_serve(args: argparse.Namespace) -> int:
+    import uvicorn
+
+    from boardroom.api import create_app
+    from boardroom.api.settings import ApiSettings
+
+    try:
+        port = args.port or int(os.getenv("PORT") or 8000)
+        settings = ApiSettings.from_env()
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    if args.dev:
+        settings = replace(settings, dev_mode=True)
+    if settings.access_mode == "dev" and args.host not in {"127.0.0.1", "::1", "localhost"}:
+        print("warning: dev mode without API keys is exposed beyond localhost", file=sys.stderr)
+    mode = {
+        "api-key": "API-key auth",
+        "dev": "dev mode (no auth)",
+        "public-demo": "public demo (packaged scenarios + mock provider)",
+    }[settings.access_mode]
+    sync = " | sync debates" if settings.sync_runs else ""
+    print(f"BoardRoom AI {__version__} on http://{args.host}:{port} | {mode}{sync}", flush=True)
+    uvicorn.run(create_app(settings), host=args.host, port=port, log_level="info")
+    return 0
 
 
 def _progress(stage: str, position: Position) -> None:
@@ -45,6 +82,8 @@ def _progress(stage: str, position: Position) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    if args.command == "serve":
+        return _cmd_serve(args)
     if args.command == "scenarios":
         for name in list_scenarios():
             print(f"{name:<26} {load_packaged(name).title}")
