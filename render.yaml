@@ -1,0 +1,21 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Deploys the Docker image as a public demo: packaged scenarios and the offline mock provider.
+# To lock it down or use a real LLM, add BOARDROOM_API_KEYS (and BOARDROOM_PROVIDER,
+# BOARDROOM_API_KEY, ...) as secret environment variables in the Render dashboard.
+services:
+  - type: web
+    name: boardroom-ai-multi-agent
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: BOARDROOM_PROVIDER
+        value: mock
+      # Render's proxy appends the real client IP to X-Forwarded-For (per-client rate limits)
+      - key: BOARDROOM_TRUST_PROXY
+        value: "true"
+      - key: BOARDROOM_MAX_CONCURRENT_RUNS
+        value: "1"
