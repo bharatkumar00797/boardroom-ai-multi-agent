@@ -138,6 +138,10 @@
     $("memo").replaceChildren();
     $("headline").textContent = "Debate in progress: " + detail.title;
     const cur = state.current;
+    if (state.scenarios[detail.scenario_id] && $("scenario").value !== detail.scenario_id) {
+      $("scenario").value = detail.scenario_id;
+      showScenario();
+    }
     if (state.scenarios[detail.scenario_id]) {
       try { cur.scenario = await api("/api/scenarios/" + encodeURIComponent(detail.scenario_id)); }
       catch (err) { /* titles fall back to option ids */ }
