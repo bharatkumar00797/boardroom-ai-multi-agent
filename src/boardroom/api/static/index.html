@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BoardRoom AI - multi-agent decision engine</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>BoardRoom AI</h1>
+      <p class="tag">AI executive agents debate, critique and vote on your business decision.</p>
+    </div>
+    <div class="meta"><span id="mode" class="pill">loading...</span> <a href="/docs">API docs</a></div>
+  </header>
+  <main>
+    <section class="panel" id="setup">
+      <h2>1. Choose a decision</h2>
+      <div class="row">
+        <label>Scenario <select id="scenario"></select></label>
+        <label>Debate rounds <input id="rounds" type="number" min="0" max="5" value="2"></label>
+        <label id="key-wrap" hidden>API key <input id="apikey" type="password" autocomplete="off"></label>
+      </div>
+      <p id="question" class="question"></p>
+      <ul id="options" class="options"></ul>
+      <details id="custom-wrap" hidden>
+        <summary>Custom scenario (JSON)</summary>
+        <textarea id="custom" rows="10" spellcheck="false" placeholder='{"id": "my-decision", ...}'></textarea>
+      </details>
+      <button id="run" type="button">Convene the board</button>
+      <span id="status" class="status" role="status"></span>
+    </section>
+
+    <section class="panel" id="result" hidden>
+      <h2>2. Board decision</h2>
+      <div id="headline" class="headline"></div>
+      <div class="tabs" role="tablist">
+        <button type="button" data-tab="debate" class="active">Debate</button>
+        <button type="button" data-tab="ranking">Ranking</button>
+        <button type="button" data-tab="memo">Memo</button>
+      </div>
+      <div id="tab-debate" class="tab"><ol id="transcript" class="transcript"></ol></div>
+      <div id="tab-ranking" class="tab" hidden><div id="chart" class="chart"></div></div>
+      <div id="tab-memo" class="tab" hidden>
+        <div class="row">
+          <button type="button" id="copy">Copy Markdown</button>
+          <button type="button" id="download">Download .md</button>
+        </div>
+        <div id="memo" class="memo"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Recent decisions</h2>
+      <ul id="history" class="history"></ul>
+    </section>
+  </main>
+  <footer>Open source &middot; MIT &middot; offline mock provider by default</footer>
+</body>
+</html>
